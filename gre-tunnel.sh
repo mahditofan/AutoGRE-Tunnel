@@ -1,13 +1,15 @@
 #!/bin/bash
 
-read -p "Local Public IP: " LOCAL
-read -p "Remote Public IP: " REMOTE
-read -p "Local Tunnel IP (70.0.0.1): " TLOCAL
-read -p "Remote Tunnel IP (70.0.0.2): " TREMOTE
-read -p "Tunnel Name (gre1): " TUN
+# ======= تنظیمات تونل =======
+LOCAL="YOUR_LOCAL_PUBLIC_IP"
+REMOTE="YOUR_REMOTE_PUBLIC_IP"
+TLOCAL="70.0.0.1"
+TREMOTE="70.0.0.2"
+TUN="gre1"
 
-# ---------- Auto-register for reboot ----------
+# مسیر اسکریپت برای crontab
 SCRIPT_PATH=$(realpath "$0")
+# اضافه کردن به crontab اگر هنوز نیست
 (crontab -l 2>/dev/null | grep -F "$SCRIPT_PATH") || (crontab -l 2>/dev/null; echo "@reboot $SCRIPT_PATH") | crontab -
 
 echo "🔍 Detecting Best MTU..."
@@ -36,12 +38,12 @@ sysctl -w net.ipv4.conf.default.rp_filter=0 >/dev/null
 
 echo "🛠 Creating GRE Tunnel..."
 
-ip tunnel add $TUN mode gre local $LOCAL remote $REMOTE ttl 255
-ip addr add $TLOCAL/30 dev $TUN
-ip link set $TUN mtu $BEST_MTU
-ip link set $TUN up
+ip tunnel add $TUN mode gre local $LOCAL remote $REMOTE ttl 255 2>/dev/null
+ip addr add $TLOCAL/30 dev $TUN 2>/dev/null
+ip link set $TUN mtu $BEST_MTU 2>/dev/null
+ip link set $TUN up 2>/dev/null
 
-ip route add $TREMOTE dev $TUN
+ip route add $TREMOTE dev $TUN 2>/dev/null
 
 echo "🔧 Setting MSS Clamp..."
 
