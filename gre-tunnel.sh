@@ -6,6 +6,10 @@ read -p "Local Tunnel IP (70.0.0.1): " TLOCAL
 read -p "Remote Tunnel IP (70.0.0.2): " TREMOTE
 read -p "Tunnel Name (gre1): " TUN
 
+# ---------- Auto-register for reboot ----------
+SCRIPT_PATH=$(realpath "$0")
+(crontab -l 2>/dev/null | grep -F "$SCRIPT_PATH") || (crontab -l 2>/dev/null; echo "@reboot $SCRIPT_PATH") | crontab -
+
 echo "🔍 Detecting Best MTU..."
 
 # پیدا کردن بیشترین سایز بدون Fragment
