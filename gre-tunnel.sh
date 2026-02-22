@@ -10,8 +10,8 @@ create_tunnel() {
 
 read -p "Local Public IP: " LOCAL
 read -p "Remote Public IP: " REMOTE
-read -p "Local Tunnel IP (70.0.0.1): " TLOCAL
-read -p "Remote Tunnel IP (70.0.0.2): " TREMOTE
+read -p "Local Tunnel IP (30.0.0.1): " TLOCAL
+read -p "Remote Tunnel IP (30.0.0.2): " TREMOTE
 read -p "Tunnel Name (gre1): " TUN
 
 echo "🔍 Detecting Best MTU..."
